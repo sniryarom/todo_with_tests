@@ -22769,11 +22769,12 @@
 	      return newArray.push({ text: item.text, checked: item.checked });
 	    });
 	
-	    _this.state = { text: '', textList: newArray };
+	    _this.state = { text: '', textList: newArray, style: spanTextRegularStyle };
 	    _this.update = _this.update.bind(_this);
 	    _this.addItem = _this.addItem.bind(_this);
 	    _this.removeItem = _this.removeItem.bind(_this);
 	    _this.handleKeyPress = _this.handleKeyPress.bind(_this);
+	    _this.checkItem = _this.checkItem.bind(_this);
 	    return _this;
 	  }
 	
@@ -22797,6 +22798,19 @@
 	      if (event.key == 'Enter') {
 	        this.addItem();
 	      }
+	    }
+	  }, {
+	    key: 'checkItem',
+	    value: function checkItem(e, index) {
+	      console.log('add item clicked');
+	      var array = this.state.textList;
+	      if (e.target.checked) {
+	        array[index].checked = true;
+	      } else {
+	        array[index].checked = false;
+	      }
+	
+	      this.setState({ textList: array });
 	    }
 	  }, {
 	    key: 'removeItem',
@@ -22828,7 +22842,7 @@
 	            null,
 	            'ToDo List'
 	          ),
-	          _react2.default.createElement(TodoFilter, { list: this.state.textList, removeItemFunc: this.removeItem })
+	          _react2.default.createElement(TodoFilter, { list: this.state.textList, checkItem: this.checkItem, removeItemFunc: this.removeItem })
 	        )
 	      );
 	    }
@@ -22852,6 +22866,7 @@
 	
 	    _this2.state = { filter: 'all' };
 	    _this2.handleRemoveItem = _this2.handleRemoveItem.bind(_this2);
+	    _this2.checkItem = _this2.checkItem.bind(_this2);
 	    // this.handleFilterAll = this.handleFilterAll.bind(this);
 	    // this.handleFilterOpen = this.handleFilterOpen.bind(this);
 	    // this.handleFilterCompleted = this.handleFilterCompleted.bind(this);
@@ -22877,6 +22892,11 @@
 	    //   setState({filter: 'completed'})
 	    // }
 	
+	  }, {
+	    key: 'checkItem',
+	    value: function checkItem(e, index) {
+	      this.props.checkItem(e, index);
+	    }
 	  }, {
 	    key: 'handleFilter',
 	    value: function handleFilter(appliedFilter) {
@@ -22929,7 +22949,7 @@
 	            )
 	          )
 	        ),
-	        _react2.default.createElement(TodoList, { list: this.props.list, filter: this.state.filter, removeItemFunc: this.handleRemoveItem })
+	        _react2.default.createElement(TodoList, { list: this.props.list, filter: this.state.filter, checkItem: this.checkItem, removeItemFunc: this.handleRemoveItem })
 	      );
 	    }
 	  }]);
@@ -22950,7 +22970,6 @@
 	
 	    var _this4 = _possibleConstructorReturn(this, (TodoList.__proto__ || Object.getPrototypeOf(TodoList)).call(this, props));
 	
-	    _this4.state = { style: spanTextRegularStyle };
 	    _this4.checkItem = _this4.checkItem.bind(_this4);
 	    _this4.handleRemoveItem = _this4.handleRemoveItem.bind(_this4);
 	    return _this4;
@@ -22963,13 +22982,8 @@
 	    }
 	  }, {
 	    key: 'checkItem',
-	    value: function checkItem(e) {
-	      console.log('add item clicked');
-	      if (e.target.checked) {
-	        this.setState({ style: spanTextStrikeThroughStyle });
-	      } else {
-	        this.setState({ style: spanTextRegularStyle });
-	      }
+	    value: function checkItem(e, index) {
+	      this.props.checkItem(e, index);
 	    }
 	  }, {
 	    key: 'render',
@@ -23005,7 +23019,7 @@
 	          'ul',
 	          { id: 'todoList', style: todoListTypeStyle },
 	          filteredList.map(function (item, index) {
-	            return _react2.default.createElement(TodoItem, { key: index + item.text, index: index, text: item.text, checked: item.checked, removeItemFunc: _this5.handleRemoveItem });
+	            return _react2.default.createElement(TodoItem, { key: index + item.text, index: index, text: item.text, checked: item.checked, checkItem: _this5.checkItem, removeItemFunc: _this5.handleRemoveItem });
 	          })
 	        ),
 	        numOfItems > 0 && _react2.default.createElement(
@@ -23029,7 +23043,6 @@
 	
 	    var _this6 = _possibleConstructorReturn(this, (TodoItem.__proto__ || Object.getPrototypeOf(TodoItem)).call(this, props));
 	
-	    _this6.state = { style: spanTextRegularStyle };
 	    _this6.checkItem = _this6.checkItem.bind(_this6);
 	    _this6.handleRemoveItem = _this6.handleRemoveItem.bind(_this6);
 	    return _this6;
@@ -23038,12 +23051,7 @@
 	  _createClass(TodoItem, [{
 	    key: 'checkItem',
 	    value: function checkItem(e) {
-	      console.log('add item clicked');
-	      if (e.target.checked) {
-	        this.setState({ style: spanTextStrikeThroughStyle });
-	      } else {
-	        this.setState({ style: spanTextRegularStyle });
-	      }
+	      this.props.checkItem(e, this.props.index);
 	    }
 	  }, {
 	    key: 'handleRemoveItem',

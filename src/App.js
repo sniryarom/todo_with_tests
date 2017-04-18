@@ -44,11 +44,12 @@ const filterButtonStyle = {
                 newArray.push({text: item.text, checked: item.checked})
             ))
 
-     this.state = {text: '', textList: newArray}
+     this.state = {text: '', textList: newArray, style: spanTextRegularStyle}
      this.update = this.update.bind(this)
      this.addItem = this.addItem.bind(this)
      this.removeItem = this.removeItem.bind(this)
      this.handleKeyPress = this.handleKeyPress.bind(this)
+     this.checkItem = this.checkItem.bind(this);
    }
 
    update(e){
@@ -70,6 +71,19 @@ const filterButtonStyle = {
   }
 }
 
+checkItem(e, index){
+      console.log('add item clicked');
+      let array = this.state.textList;  
+      if (e.target.checked) {
+        array[index].checked = true;
+      }
+      else {
+       array[index].checked = false;
+      }
+
+      this.setState({textList: array});
+   }
+
 removeItem(e, index) {
     let array = this.state.textList;
     console.log('remove item clicked for index: ' + index)
@@ -86,7 +100,7 @@ removeItem(e, index) {
           <hr/>
           <div>
             <h1>ToDo List</h1>
-            <TodoFilter list={this.state.textList} removeItemFunc={this.removeItem} />            
+            <TodoFilter list={this.state.textList} checkItem={this.checkItem} removeItemFunc={this.removeItem} />            
           </div>
        </div>
      )
@@ -101,6 +115,7 @@ removeItem(e, index) {
     super(props);
     this.state = {filter: 'all'}
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
+    this.checkItem = this.checkItem.bind(this);
     // this.handleFilterAll = this.handleFilterAll.bind(this);
     // this.handleFilterOpen = this.handleFilterOpen.bind(this);
     // this.handleFilterCompleted = this.handleFilterCompleted.bind(this);
@@ -123,6 +138,10 @@ removeItem(e, index) {
   //   setState({filter: 'completed'})
   // }
 
+  checkItem(e, index){
+      this.props.checkItem(e, index);
+   }
+
   handleFilter(appliedFilter) {
     this.setState({filter: appliedFilter})
   }
@@ -137,7 +156,7 @@ removeItem(e, index) {
           <span style={filterButtonStyle}><a href="#" onClick={() => this.handleFilter('open')}>Open</a></span>
           <span style={filterButtonStyle}><a href="#" onClick={() => this.handleFilter('completed')}>Completed</a></span>
         </div>
-        <TodoList list={this.props.list} filter={this.state.filter} removeItemFunc={this.handleRemoveItem} />
+        <TodoList list={this.props.list} filter={this.state.filter} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem} />
       </div>
       )
   }
@@ -153,7 +172,6 @@ removeItem(e, index) {
 
   constructor(props){
     super(props);
-    this.state = {style: spanTextRegularStyle};
     this.checkItem = this.checkItem.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
   }
@@ -162,14 +180,8 @@ removeItem(e, index) {
     this.props.removeItemFunc(e, index);
   }
 
-  checkItem(e){
-      console.log('add item clicked')
-      if (e.target.checked) {
-        this.setState({style: spanTextStrikeThroughStyle})
-      }
-      else {
-       this.setState({style: spanTextRegularStyle}) 
-      }
+  checkItem(e, index){
+      this.props.checkItem(e, index);
    }
 
   render(){
@@ -200,7 +212,7 @@ removeItem(e, index) {
         <ul id="todoList" style={todoListTypeStyle}>
         {
             filteredList.map((item, index) => (  
-                <TodoItem key={index+item.text} index={index} text={item.text} checked={item.checked} removeItemFunc={this.handleRemoveItem}/>
+                <TodoItem key={index+item.text} index={index} text={item.text} checked={item.checked} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem}/>
             ))
 
             
@@ -218,19 +230,12 @@ removeItem(e, index) {
 class TodoItem extends React.Component {
    constructor(props){
      super(props);
-     this.state = {style: spanTextRegularStyle};
      this.checkItem = this.checkItem.bind(this);
      this.handleRemoveItem = this.handleRemoveItem.bind(this);
    }
 
    checkItem(e){
-      console.log('add item clicked');
-      if (e.target.checked) {
-        this.setState({style: spanTextStrikeThroughStyle});
-      }
-      else {
-       this.setState({style: spanTextRegularStyle});
-      }
+      this.props.checkItem(e, this.props.index)
    }
 
    handleRemoveItem(e) {
