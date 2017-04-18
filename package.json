@@ -1,0 +1,38 @@
+{
+  "name": "todo_with_tests",
+  "version": "1.0.0",
+  "description": "todo list with mocha and enzyme tests",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "webpack -p",
+    "test": "mocha"
+  },
+  "author": "snir yarom",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-prometheusresearch": "^0.1.0",
+    "babel-preset-react": "^6.23.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "enzyme": "^2.8.0",
+    "gulp": "^3.9.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-open": "^2.0.0",
+    "mocha": "^3.2.0",
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.5.0",
+    "react-dom": "^15.5.3",
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.12.12"
+  },
+  "dependencies": {
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "webpack": "^2.3.2"
+  }
+}

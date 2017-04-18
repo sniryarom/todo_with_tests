@@ -1,0 +1,14 @@
+//running webpack to bundle and watch for changes
+./node_modules/.bin/webpack -d --watch
+
+//the above + running webpack dev server
+webpack-dev-server --progress --colors
+//and you have a server in this url
+http://localhost:8080/webpack-dev-server/
+//or
+http://localhost:8080/index.html
+
+//website for basic webpack config
+https://www.codementor.io/tamizhvendan/beginner-guide-setup-reactjs-environment-npm-babel-6-webpack-du107r9zr
+
+https://www.twilio.com/blog/2015/08/setting-up-react-for-es6-with-webpack-and-babel-2.html
