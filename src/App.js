@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 //import styles from './AppStyles.css'; // Tell Webpack that Button.js uses these styles
+import CSSModules from 'react-css-modules';
+import styles from '../style/list.css';
 
 const checkboxHideStyle = {
   display: 'none'
@@ -15,7 +17,7 @@ const checkboxShowStyle = {
 };
 
 const todoListTypeStyle = {
-  listStyleType: 'none'
+  //listStyleType: 'none'
 };
 
 const spanTextStrikeThroughStyle = {
@@ -33,6 +35,8 @@ const deleteBtnStyle = {
 const filterButtonStyle = {
   margin: '15px'
 };
+
+
 
 
 
@@ -186,7 +190,6 @@ removeItem(e, index) {
 
   render(){
     console.log('TodoList render');
-    const numOfItems = this.props.list.length;
     var filteredList = [];
     for (var i = 0; i < this.props.list.length; i++) {
       let item = this.props.list[i];
@@ -206,16 +209,15 @@ removeItem(e, index) {
           filteredList.push(item);  
       }
     }
-   
+    const numOfItems = filteredList.length;
+
     return (
       <div>
-        <ul id="todoList" style={todoListTypeStyle}>
+        <ul id="todoList" styleName='list' style={todoListTypeStyle}>
         {
             filteredList.map((item, index) => (  
                 <TodoItem key={index+item.text} index={index} text={item.text} checked={item.checked} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem}/>
             ))
-
-            
         }    
         </ul>
         {numOfItems > 0 && 
@@ -244,10 +246,10 @@ class TodoItem extends React.Component {
 
    render(){
     console.log('TodoItem render');
-    const itemStyle = this.props.checked ? spanTextStrikeThroughStyle : spanTextRegularStyle
+    let itemStyle = this.props.checked ? spanTextStrikeThroughStyle : spanTextRegularStyle
      return (
        <li>
-            <input type="checkbox" onClick={this.checkItem} />
+            <input type="checkbox" defaultChecked={this.props.checked} onClick={this.checkItem} />
             <span style={itemStyle}>{this.props.text}</span>
             <a href='#' style={deleteBtnStyle} onClick={this.handleRemoveItem}>delete</a>
        </li>
