@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import TodoApp from './App';
 
 var data = [
-	{ text: 'call Rony', checked: false },
-  	{ text: 'get a driving license', checked: true },
-  	{ text: 'open a bank account', checked: false }
+	{ text: 'call Rony', completed: false },
+	{ text: 'get a driving license', completed: true },
+	{ text: 'open a bank account', completed: false }
 ];
 
 ReactDOM.render(
@@ -14,4 +14,3 @@ ReactDOM.render(
 );
 
 //console.log('Hello World!');
-

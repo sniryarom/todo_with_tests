@@ -1,4 +1,33 @@
+.todolist {
+  list-style: none;
+  margin: 20px 0 20px;
+  padding: 0;
+}
 
-.list {
-	list-style-type: none;
+.todoDetails {
+  width: 400px;
+  display: inline-block;
+}
+
+.todoDelete {
+    margin: 30px;
+}
+
+.filterText {
+  margin-right: 30px;
+  font-size: 18px;
+  display: inline-block;
+}
+
+.isCompleted {
+  text-decoration: line-through;
+}
+
+
+.filterItem {
+  text-transform: capitalize;
+}
+
+.taskEntry {
+  margin-right: 20px;
 }

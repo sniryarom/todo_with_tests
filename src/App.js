@@ -1,179 +1,125 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-//import styles from './AppStyles.css'; // Tell Webpack that Button.js uses these styles
-import CSSModules from 'react-css-modules';
+import classNames from 'classnames/bind';
 import styles from '../style/list.css';
 
-const checkboxHideStyle = {
-  display: 'none'
-};
+const cx = classNames.bind(styles);
 
-const inputBtnStyle = {
-  marginRight: '20px'
-};
-
-const checkboxShowStyle = {
-  display: 'block'
-};
-
-const todoListTypeStyle = {
-  //listStyleType: 'none'
-};
-
-const spanTextStrikeThroughStyle = {
-  textDecoration: 'line-through'
-};
-
-const spanTextRegularStyle = {
-  textDecoration: 'none'
-};
-
-const deleteBtnStyle = {
-  margin: '30px'
-};
-
-const filterButtonStyle = {
-  margin: '15px'
-};
-
-
-
-
-
- class TodoApp extends React.Component {
-  constructor(props){
-     super(props);
-     var newArray = [];
-      this.props.data.map((item) => (  
-                newArray.push({text: item.text, checked: item.checked})
-            ))
-
-     this.state = {text: '', textList: newArray, style: spanTextRegularStyle}
-     this.update = this.update.bind(this)
-     this.addItem = this.addItem.bind(this)
-     this.removeItem = this.removeItem.bind(this)
-     this.handleKeyPress = this.handleKeyPress.bind(this)
-     this.checkItem = this.checkItem.bind(this);
-   }
-
-   update(e){
-      this.setState({text: e.target.value})
-   }
-
-   addItem(){
-    if (this.state.text !== '') {
-      let newArray = this.state.textList.slice();    
-      newArray.push({text: this.state.text, checked: false});   
-      this.setState({textList: newArray, text: ''})
-    }
-    
-  }
-
-  handleKeyPress (event) {
-  if(event.key == 'Enter'){
-   this.addItem();  
-  }
-}
-
-checkItem(e, index){
-      console.log('add item clicked');
-      let array = this.state.textList;  
-      if (e.target.checked) {
-        array[index].checked = true;
-      }
-      else {
-       array[index].checked = false;
-      }
-
-      this.setState({textList: array});
-   }
-
-removeItem(e, index) {
-    let array = this.state.textList;
-    console.log('remove item clicked for index: ' + index)
-    array.splice(index, 1);
-    this.setState({textList: array});
-  }
-  
-  render(){
-     console.log('App render');
-     return (
-       <div className = "todo">
-        <input type="text" style={inputBtnStyle} value={this.state.text} onChange={this.update} onKeyPress={this.handleKeyPress} />
-        <button onClick={this.addItem} >ADD</button>
-          <hr/>
-          <div>
-            <h1>ToDo List</h1>
-            <TodoFilter list={this.state.textList} checkItem={this.checkItem} removeItemFunc={this.removeItem} />            
-          </div>
-       </div>
-     )
-   }
- } 
-
- /*
- *
- */
- class TodoFilter extends React.Component {
-  constructor(props){
+class TodoApp extends React.Component {
+ constructor(props){
     super(props);
-    this.state = {filter: 'all'}
-    this.handleRemoveItem = this.handleRemoveItem.bind(this);
+    var newArray = [];
+    this.props.data.map((item) => (
+       newArray.push({text: item.text, completed: item.completed})
+   ))
+
+    this.state = {text: '', textList: newArray}
+    this.update = this.update.bind(this)
+    this.addItem = this.addItem.bind(this)
+    this.removeItem = this.removeItem.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.checkItem = this.checkItem.bind(this);
-    // this.handleFilterAll = this.handleFilterAll.bind(this);
-    // this.handleFilterOpen = this.handleFilterOpen.bind(this);
-    // this.handleFilterCompleted = this.handleFilterCompleted.bind(this);
-    this.handleFilter = this.handleFilter.bind(this);
   }
 
-  handleRemoveItem(e, index) {
-    this.props.removeItemFunc(e, index);
+  update(e){
+     this.setState({text: e.target.value})
   }
 
-  // handleFilterAll() {
-  //   setState({filter: 'all'})
-  // }
-
-  // handleFilterOpen() {
-  //   setState({filter: 'open'};
-  // }
-
-  // handleFilterCompleted() {
-  //   setState({filter: 'completed'})
-  // }
-
-  checkItem(e, index){
-      this.props.checkItem(e, index);
+  addItem(){
+   if (this.state.text !== '') {
+     let newArray = this.state.textList.slice();
+     newArray.push({text: this.state.text, completed: false});
+     this.setState({textList: newArray, text: ''})
    }
-
-  handleFilter(appliedFilter) {
-    this.setState({filter: appliedFilter})
-  }
-
-  render(){
-    let filter = this.state.filter;
-    console.log('TodoList filter applied is: ' + filter);
-    return (
-      <div>
-        <div>          
-          <span style={filterButtonStyle}><a href="#" onClick={() => this.handleFilter('all')}>All</a></span>
-          <span style={filterButtonStyle}><a href="#" onClick={() => this.handleFilter('open')}>Open</a></span>
-          <span style={filterButtonStyle}><a href="#" onClick={() => this.handleFilter('completed')}>Completed</a></span>
-        </div>
-        <TodoList list={this.props.list} filter={this.state.filter} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem} />
-      </div>
-      )
-  }
 
  }
 
- 
+ handleKeyPress (event) {
+ if(event.key == 'Enter'){
+  this.addItem();
+ }
+}
 
-/**
-*
-*/
- class TodoList extends React.Component {
+checkItem(e, index){
+     let array = this.state.textList;
+     if (e.target.checked) {
+       array[index].completed = true;
+     }
+     else {
+      array[index].completed = false;
+     }
 
+     this.setState({textList: array});
+  }
+
+removeItem(e, index) {
+   let array = this.state.textList;
+   array.splice(index, 1);
+   this.setState({textList: array});
+ }
+
+ render(){
+    return (
+      <div className={cx('todo')}>
+        <form >
+          <input type="text" className={cx('taskEntry')} value={this.state.text} onChange={this.update} onKeyPress={this.handleKeyPress} />
+          <button onClick={this.addItem} >Add Todo</button>
+        </form>
+       <hr/>
+       <div>
+        <h1>Todo List</h1>
+         <TodoFilter list={this.state.textList} checkItem={this.checkItem} removeItemFunc={this.removeItem} />
+       </div>
+      </div>
+    )
+  }
+}
+
+class TodoFilter extends React.Component {
+ constructor(props){
+   super(props);
+   this.state = {filter: 'all'}
+   this.handleRemoveItem = this.handleRemoveItem.bind(this);
+   this.checkItem = this.checkItem.bind(this);
+   this.handleFilter = this.handleFilter.bind(this);
+ }
+
+ handleRemoveItem(e, index) {
+   this.props.removeItemFunc(e, index);
+ }
+
+ checkItem(e, index){
+     this.props.checkItem(e, index);
+  }
+
+ handleFilter(appliedFilter) {
+   this.setState({filter: appliedFilter})
+ }
+
+ render(){
+   let filter = this.state.filter;
+
+   const renderFilter = (filter, currentFilter) => {
+     return (filter === currentFilter ? <span className={cx('filterItem')}>{filter}</span> : <a href="#"  className={cx('filterItem')} onClick={() => this.handleFilter(filter)}>{filter}</a>)
+   };
+   return (
+     <div>
+       <div>
+         Show:
+         {" "}
+         {renderFilter('all',  filter)}
+         {", "}
+         {renderFilter('active', filter)}
+         {", "}
+         {renderFilter('completed', filter)}
+       </div>
+       <TodoList list={this.props.list} filter={this.state.filter} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem} />
+     </div>
+     )
+ }
+
+}
+
+class TodoList extends React.Component {
   constructor(props){
     super(props);
     this.checkItem = this.checkItem.bind(this);
@@ -185,42 +131,40 @@ removeItem(e, index) {
   }
 
   checkItem(e, index){
-      this.props.checkItem(e, index);
-   }
-
-  render(){
-    console.log('TodoList render');
+    this.props.checkItem(e, index);
+ }
+  render() {
     var filteredList = [];
     for (var i = 0; i < this.props.list.length; i++) {
       let item = this.props.list[i];
       switch(this.props.filter) {
-        case 'open':
-          if (!(item.checked)) {
-            filteredList.push(item);  
+        case 'active':
+          if (!(item.completed)) {
+            filteredList.push(item);
           }
           break;
         case 'completed':
-          if (item.checked) {
-            filteredList.push(item);  
+          if (item.completed) {
+            filteredList.push(item);
           }
           break;
         case 'all':
         default:
-          filteredList.push(item);  
+          filteredList.push(item);
       }
     }
     const numOfItems = filteredList.length;
 
     return (
       <div>
-        <ul id="todoList" styleName='list' style={todoListTypeStyle}>
+        <ul id="todoList" className={cx('todolist')}>
         {
-            filteredList.map((item, index) => (  
-                <TodoItem key={index+item.text} index={index} text={item.text} checked={item.checked} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem}/>
+            filteredList.map((item, index) => (
+                <TodoItem key={index+item.text} index={index} text={item.text} checked={item.completed} checkItem={this.checkItem} removeItemFunc={this.handleRemoveItem}/>
             ))
-        }    
+        }
         </ul>
-        {numOfItems > 0 && 
+        {numOfItems > 0 &&
           <span>Number of items:  {numOfItems}</span>
         }
       </div>
@@ -228,7 +172,7 @@ removeItem(e, index) {
   }
 }
 
-
+// todolist__todoDetails___2EAmo todolist__spanTextStrikeThroughStyle___J4Wfe
 class TodoItem extends React.Component {
    constructor(props){
      super(props);
@@ -245,18 +189,14 @@ class TodoItem extends React.Component {
   }
 
    render(){
-    console.log('TodoItem render');
-    let itemStyle = this.props.checked ? spanTextStrikeThroughStyle : spanTextRegularStyle
      return (
        <li>
-            <input type="checkbox" defaultChecked={this.props.checked} onClick={this.checkItem} />
-            <span style={itemStyle}>{this.props.text}</span>
-            <a href='#' style={deleteBtnStyle} onClick={this.handleRemoveItem}>delete</a>
+            <input className={cx('todoToggle')} type="checkbox" defaultChecked={this.props.checked} onClick={this.checkItem} />
+            <span className={cx('todoDetails', {'isCompleted': this.props.checked})}>{this.props.text}</span>
+            <a href='#' className={cx('todoDelete')} onClick={this.handleRemoveItem}>delete</a>
        </li>
      )
    }
  }
 
-
-
- export default TodoApp
+export default TodoApp;
